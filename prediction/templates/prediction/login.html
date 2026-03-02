@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>เข้าสู่ระบบ | Smart Medical AI</title>
+    <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Prompt', sans-serif; background-color: #f1f5f9; display: flex; justify-content: center; align-items: center; min-height: 100vh; }
+        .login-card { background: white; padding: 40px; border-radius: 20px; box-shadow: 0 10px 25px rgba(0,0,0,0.05); width: 100%; max-width: 420px; text-align: center; }
+        .logo { display: flex; align-items: center; justify-content: center; gap: 10px; font-size: 24px; font-weight: 700; color: #2563eb; margin-bottom: 30px; }
+        .logo svg { width: 32px; height: 32px; }
+        .input-group { text-align: left; margin-bottom: 20px; }
+        .input-group label { display: block; font-size: 14px; font-weight: 500; color: #475569; margin-bottom: 8px; }
+        .form-control { width: 100%; padding: 14px; border: 2px solid #e2e8f0; border-radius: 12px; font-family: 'Prompt', sans-serif; font-size: 15px; outline: none; transition: 0.3s; }
+        .form-control:focus { border-color: #2563eb; background-color: #eff6ff; }
+        .btn-login { width: 100%; padding: 14px; background-color: #2563eb; color: white; border: none; border-radius: 12px; font-size: 16px; font-weight: 600; font-family: 'Prompt', sans-serif; cursor: pointer; transition: 0.3s; margin-top: 10px; }
+        .btn-login:hover { background-color: #1d4ed8; transform: translateY(-2px); box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3); }
+        .error-msg { color: #ef4444; font-size: 14px; margin-bottom: 20px; background: #fee2e2; padding: 10px; border-radius: 8px; }
+    </style>
+</head>
+<body>
+
+    <div class="login-card">
+        <div class="logo">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg>
+            SmartMed AI
+        </div>
+        <h2 style="font-size: 20px; color: #0f172a; margin-bottom: 8px;">เข้าสู่ระบบสำหรับบุคลากร</h2>
+        <p style="color: #64748b; font-size: 14px; margin-bottom: 30px;">กรุณากรอกรหัสประจำตัวแพทย์เพื่อเข้าถึงข้อมูล</p>
+
+        {% if form.errors %}
+            <div class="error-msg">ชื่อผู้ใช้หรือรหัสผ่านไม่ถูกต้อง กรุณาลองใหม่อีกครั้ง</div>
+        {% endif %}
+
+        <form method="POST">
+            {% csrf_token %}
+            <div class="input-group">
+                <label>ชื่อผู้ใช้งาน (Username)</label>
+                <input type="text" name="username" class="form-control" placeholder="กรอกชื่อผู้ใช้งาน" required autofocus>
+            </div>
+            <div class="input-group">
+                <label>รหัสผ่าน (Password)</label>
+                <input type="password" name="password" class="form-control" placeholder="••••••••" required>
+            </div>
+            <button type="submit" class="btn-login">เข้าสู่ระบบ</button>
+        </form>
+        <p style="margin-top: 24px; font-size: 12px; color: #94a3b8;">&copy; 2026 Smart Medical System. All rights reserved.</p>
+    </div>
+
+</body>
+</html>

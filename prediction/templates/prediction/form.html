@@ -5,8 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Smart Medical AI | ระบบประเมินความเสี่ยงโรคหัวใจขั้นสูง</title>
     <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-
+    
     <style>
         /* ==========================================================================
            1. CSS Variables & Design System (ระบบสีและตัวแปรหลัก)
@@ -37,647 +36,87 @@
         }
 
         /* ==========================================================================
-           2. Reset & Base Styles (ตั้งค่าพื้นฐาน)
+           2. Reset & Base Styles
            ========================================================================== */
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        body {
-            font-family: 'Prompt', sans-serif;
-            background-color: var(--background);
-            color: var(--text-main);
-            line-height: 1.5;
-            overflow-x: hidden;
-            display: flex;
-        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Prompt', sans-serif; background-color: var(--background); color: var(--text-main); line-height: 1.5; overflow-x: hidden; display: flex; }
 
         /* ==========================================================================
-           3. Sidebar Navigation (เมนูด้านข้าง)
+           3. Sidebar Navigation
            ========================================================================== */
-        .sidebar {
-            width: var(--sidebar-width);
-            background-color: var(--surface);
-            height: 100vh;
-            position: fixed;
-            left: 0;
-            top: 0;
-            border-right: 1px solid var(--border);
-            z-index: 100;
-            display: flex;
-            flex-direction: column;
-            transition: var(--transition);
-            box-shadow: var(--shadow-sm);
-        }
-
-        .sidebar-brand {
-            height: var(--header-height);
-            display: flex;
-            align-items: center;
-            padding: 0 24px;
-            font-size: 20px;
-            font-weight: 700;
-            color: var(--primary);
-            border-bottom: 1px solid var(--border);
-        }
-
-        .sidebar-brand svg {
-            margin-right: 10px;
-            width: 28px;
-            height: 28px;
-        }
-
-        .sidebar-menu {
-            padding: 24px 16px;
-            list-style: none;
-            flex-grow: 1;
-        }
-
-        .menu-item {
-            margin-bottom: 8px;
-        }
-
-        .menu-link {
-            display: flex;
-            align-items: center;
-            padding: 12px 16px;
-            color: var(--secondary);
-            text-decoration: none;
-            border-radius: var(--radius-md);
-            font-weight: 500;
-            transition: var(--transition);
-        }
-
-        .menu-link svg {
-            width: 20px;
-            height: 20px;
-            margin-right: 12px;
-            opacity: 0.7;
-        }
-
-        .menu-link:hover {
-            background-color: var(--primary-light);
-            color: var(--primary);
-        }
-
-        .menu-link.active {
-            background-color: var(--primary);
-            color: white;
-            box-shadow: 0 4px 10px rgba(37, 99, 235, 0.3);
-        }
-
-        .menu-link.active svg {
-            opacity: 1;
-        }
+        .sidebar { width: var(--sidebar-width); background-color: var(--surface); height: 100vh; position: fixed; left: 0; top: 0; border-right: 1px solid var(--border); z-index: 100; display: flex; flex-direction: column; transition: var(--transition); box-shadow: var(--shadow-sm); }
+        .sidebar-brand { height: var(--header-height); display: flex; align-items: center; padding: 0 24px; font-size: 20px; font-weight: 700; color: var(--primary); border-bottom: 1px solid var(--border); }
+        .sidebar-brand svg { margin-right: 10px; width: 28px; height: 28px; }
+        .sidebar-menu { padding: 24px 16px; list-style: none; flex-grow: 1; display: flex; flex-direction: column; }
+        .menu-item { margin-bottom: 8px; }
+        .menu-link { display: flex; align-items: center; padding: 12px 16px; color: var(--secondary); text-decoration: none; border-radius: var(--radius-md); font-weight: 500; transition: var(--transition); }
+        .menu-link svg { width: 20px; height: 20px; margin-right: 12px; opacity: 0.7; }
+        .menu-link:hover { background-color: var(--primary-light); color: var(--primary); }
+        .menu-link.active { background-color: var(--primary); color: white; box-shadow: 0 4px 10px rgba(37, 99, 235, 0.3); }
 
         /* ==========================================================================
-           4. Main Content Area (พื้นที่เนื้อหาหลัก)
+           4. Main Content Area
            ========================================================================== */
-        .main-content {
-            flex-grow: 1;
-            margin-left: var(--sidebar-width);
-            min-height: 100vh;
-            display: flex;
-            flex-direction: column;
-        }
+        .main-content { flex-grow: 1; margin-left: var(--sidebar-width); min-height: 100vh; display: flex; flex-direction: column; }
+        .top-header { height: var(--header-height); background-color: var(--surface); border-bottom: 1px solid var(--border); display: flex; align-items: center; justify-content: space-between; padding: 0 40px; position: sticky; top: 0; z-index: 90; }
+        .page-title { font-size: 18px; font-weight: 600; color: var(--text-main); }
+        .user-profile { display: flex; align-items: center; gap: 12px; }
+        .avatar { width: 40px; height: 40px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: bold; border: 2px solid; }
 
-        /* Header (แถบด้านบน) */
-        .top-header {
-            height: var(--header-height);
-            background-color: var(--surface);
-            border-bottom: 1px solid var(--border);
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            padding: 0 40px;
-            position: sticky;
-            top: 0;
-            z-index: 90;
-        }
+        .container { padding: 40px; max-width: 1200px; margin: 0 auto; width: 100%; }
 
-        .page-title {
-            font-size: 18px;
-            font-weight: 600;
-            color: var(--text-main);
-        }
-
-        .user-profile {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-        }
-
-        .avatar {
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            background-color: var(--primary-light);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: var(--primary);
-            font-weight: bold;
-            border: 2px solid var(--primary);
-        }
-
-        /* Content Container (กล่องเนื้อหา) */
-        .container {
-            padding: 40px;
-            max-width: 1200px;
-            margin: 0 auto;
-            width: 100%;
-        }
-
-        /* Dashboard Stats (Widget ข้อมูลจำลอง) */
-        .stats-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 24px;
-            margin-bottom: 40px;
-        }
-
-        .stat-card {
-            background-color: var(--surface);
-            padding: 24px;
-            border-radius: var(--radius-lg);
-            box-shadow: var(--shadow-sm);
-            display: flex;
-            align-items: center;
-            border: 1px solid var(--border);
-            transition: var(--transition);
-        }
-
-        .stat-card:hover {
-            transform: translateY(-5px);
-            box-shadow: var(--shadow-md);
-            border-color: var(--primary-light);
-        }
-
-        .stat-icon {
-            width: 56px;
-            height: 56px;
-            border-radius: 14px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin-right: 20px;
-        }
-
+        /* Dashboard Stats */
+        .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 24px; margin-bottom: 40px; }
+        .stat-card { background-color: var(--surface); padding: 24px; border-radius: var(--radius-lg); box-shadow: var(--shadow-sm); display: flex; align-items: center; border: 1px solid var(--border); transition: var(--transition); }
+        .stat-card:hover { transform: translateY(-5px); box-shadow: var(--shadow-md); border-color: var(--primary-light); }
+        .stat-icon { width: 56px; height: 56px; border-radius: 14px; display: flex; align-items: center; justify-content: center; margin-right: 20px; }
         .icon-blue { background-color: var(--primary-light); color: var(--primary); }
         .icon-green { background-color: var(--success-bg); color: var(--success); }
         .icon-red { background-color: var(--danger-bg); color: var(--danger); }
+        .stat-details h4 { font-size: 14px; color: var(--text-muted); font-weight: 500; margin-bottom: 4px; }
+        .stat-details p { font-size: 24px; font-weight: 700; color: var(--text-main); }
 
-        .stat-details h4 {
-            font-size: 14px;
-            color: var(--text-muted);
-            font-weight: 500;
-            margin-bottom: 4px;
-        }
+        /* Form Card */
+        .prediction-card { background-color: var(--surface); border-radius: var(--radius-lg); box-shadow: var(--shadow-lg); border: 1px solid var(--border); overflow: hidden; position: relative; }
+        .card-header-bg { background: linear-gradient(135deg, #1e3a8a 0%, var(--primary) 100%); padding: 40px; color: white; position: relative; overflow: hidden; }
+        .card-header-bg h2 { font-size: 28px; font-weight: 700; margin-bottom: 8px; display: flex; align-items: center; gap: 12px; }
+        .card-header-bg p { font-size: 16px; opacity: 0.8; font-weight: 300; max-width: 600px; }
+        .form-wrapper { padding: 40px; }
 
-        .stat-details p {
-            font-size: 24px;
-            font-weight: 700;
-            color: var(--text-main);
-        }
+        /* Form Sections */
+        .form-section { margin-bottom: 40px; padding-bottom: 30px; border-bottom: 1px dashed var(--border); }
+        .form-section:last-of-type { border-bottom: none; margin-bottom: 20px; }
+        .section-header { display: flex; align-items: center; gap: 12px; margin-bottom: 24px; }
+        .section-icon { width: 40px; height: 40px; background-color: var(--primary-light); color: var(--primary); border-radius: 10px; display: flex; align-items: center; justify-content: center; }
+        .section-title h3 { font-size: 18px; font-weight: 600; color: var(--text-main); }
+        .section-title p { font-size: 13px; color: var(--text-muted); }
 
-        /* ==========================================================================
-           5. Main Form Card (ส่วนฟอร์มกรอกข้อมูล)
-           ========================================================================== */
-        .prediction-card {
-            background-color: var(--surface);
-            border-radius: var(--radius-lg);
-            box-shadow: var(--shadow-lg);
-            border: 1px solid var(--border);
-            overflow: hidden;
-            position: relative;
-        }
+        /* Inputs */
+        .input-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 24px; }
+        .input-group label { display: flex; align-items: center; font-size: 14px; font-weight: 500; color: var(--secondary); margin-bottom: 8px; }
+        .form-control { width: 100%; padding: 14px 16px; border: 2px solid var(--border); border-radius: var(--radius-md); font-family: 'Prompt', sans-serif; font-size: 15px; color: var(--text-main); background-color: #f8fafc; transition: var(--transition); appearance: none; }
+        .form-control:focus { outline: none; border-color: var(--primary); background-color: var(--surface); box-shadow: 0 0 0 4px var(--primary-light); }
+        /* Placeholder Style */
+        .form-control::placeholder { color: #cbd5e1; font-weight: 400; }
 
-        .card-header-bg {
-            background: linear-gradient(135deg, #1e3a8a 0%, var(--primary) 100%);
-            padding: 40px;
-            color: white;
-            position: relative;
-            overflow: hidden;
-        }
+        /* Radio Buttons */
+        .radio-group { display: flex; gap: 12px; }
+        .radio-btn { flex: 1; position: relative; }
+        .radio-btn input[type="radio"] { position: absolute; opacity: 0; width: 0; height: 0; }
+        .radio-label { display: flex; align-items: center; justify-content: center; gap: 8px; width: 100%; padding: 12px; background-color: #f8fafc; border: 2px solid var(--border); border-radius: var(--radius-md); cursor: pointer; font-weight: 500; color: var(--text-muted); transition: var(--transition); }
+        .radio-btn input[type="radio"]:checked + .radio-label { background-color: var(--primary-light); border-color: var(--primary); color: var(--primary); }
 
-        /* ลวดลายกราฟิกพื้นหลังใน Header */
-        .card-header-bg::after {
-            content: '';
-            position: absolute;
-            top: -50%;
-            right: -10%;
-            width: 300px;
-            height: 300px;
-            background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0) 70%);
-            border-radius: 50%;
-        }
+        /* Action Area */
+        .action-area { display: flex; justify-content: flex-end; gap: 16px; margin-top: 20px; padding-top: 30px; border-top: 1px solid var(--border); }
+        .btn { padding: 14px 28px; border-radius: var(--radius-md); font-family: 'Prompt', sans-serif; font-size: 16px; font-weight: 600; cursor: pointer; transition: var(--transition); display: flex; align-items: center; gap: 10px; border: none; }
+        .btn-primary { background-color: var(--primary); color: white; box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3); }
+        .btn-primary:hover { background-color: var(--primary-hover); transform: translateY(-2px); box-shadow: 0 6px 16px rgba(37, 99, 235, 0.4); }
 
-        .card-header-bg h2 {
-            font-size: 28px;
-            font-weight: 700;
-            margin-bottom: 8px;
-            display: flex;
-            align-items: center;
-            gap: 12px;
-        }
-
-        .card-header-bg p {
-            font-size: 16px;
-            opacity: 0.8;
-            font-weight: 300;
-            max-width: 600px;
-        }
-
-        .form-wrapper {
-            padding: 40px;
-        }
-
-        /* ==========================================================================
-           6. Result Alert Box (กล่องแสดงผลลัพธ์)
-           ========================================================================== */
-        .result-container {
-            margin-bottom: 40px;
-            padding: 24px;
-            border-radius: var(--radius-md);
-            display: flex;
-            align-items: flex-start;
-            gap: 20px;
-            animation: slideDown 0.6s cubic-bezier(0.16, 1, 0.3, 1);
-        }
-
-        @keyframes slideDown {
-            from { opacity: 0; transform: translateY(-20px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        .result-danger {
-            background-color: #fef2f2;
-            border-left: 6px solid var(--danger);
-            color: #991b1b;
-        }
-
-        .result-success {
-            background-color: #ecfdf5;
-            border-left: 6px solid var(--success);
-            color: #065f46;
-        }
-
-        .result-icon {
-            font-size: 32px;
-            line-height: 1;
-        }
-
-        .result-content h3 {
-            font-size: 20px;
-            margin-bottom: 8px;
-            font-weight: 600;
-        }
-
-        .result-content p {
-            font-size: 15px;
-            opacity: 0.9;
-        }
-
-        /* ==========================================================================
-           7. Form Elements (ส่วนประกอบในฟอร์ม)
-           ========================================================================== */
-        .form-section {
-            margin-bottom: 40px;
-            padding-bottom: 30px;
-            border-bottom: 1px dashed var(--border);
-        }
-
-        .form-section:last-of-type {
-            border-bottom: none;
-            margin-bottom: 20px;
-        }
-
-        .section-header {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            margin-bottom: 24px;
-        }
-
-        .section-icon {
-            width: 40px;
-            height: 40px;
-            background-color: var(--primary-light);
-            color: var(--primary);
-            border-radius: 10px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .section-title h3 {
-            font-size: 18px;
-            font-weight: 600;
-            color: var(--text-main);
-        }
-
-        .section-title p {
-            font-size: 13px;
-            color: var(--text-muted);
-        }
-
-        /* Grid Layout สำหรับ Input */
-        .input-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            gap: 24px;
-        }
-
-        .input-group {
-            position: relative;
-        }
-
-        .input-group label {
-            display: flex;
-            align-items: center;
-            font-size: 14px;
-            font-weight: 500;
-            color: var(--secondary);
-            margin-bottom: 8px;
-        }
-
-        /* Tooltip (เครื่องหมายคำถามอธิบายศัพท์) */
-        .tooltip-icon {
-            margin-left: 6px;
-            color: var(--text-muted);
-            cursor: help;
-            position: relative;
-        }
-
-        .tooltip-icon svg {
-            width: 14px;
-            height: 14px;
-        }
-
-        .tooltip-text {
-            visibility: hidden;
-            background-color: #1e293b;
-            color: #fff;
-            text-align: center;
-            border-radius: 6px;
-            padding: 8px 12px;
-            position: absolute;
-            z-index: 10;
-            bottom: 125%;
-            left: 50%;
-            transform: translateX(-50%);
-            opacity: 0;
-            transition: opacity 0.3s;
-            width: max-content;
-            max-width: 200px;
-            font-size: 12px;
-            font-weight: 400;
-            line-height: 1.4;
-            box-shadow: var(--shadow-md);
-        }
-
-        .tooltip-text::after {
-            content: "";
-            position: absolute;
-            top: 100%;
-            left: 50%;
-            margin-left: -5px;
-            border-width: 5px;
-            border-style: solid;
-            border-color: #1e293b transparent transparent transparent;
-        }
-
-        .tooltip-icon:hover .tooltip-text {
-            visibility: visible;
-            opacity: 1;
-        }
-
-        /* การตกแต่ง Input และ Select */
-        .form-control {
-            width: 100%;
-            padding: 14px 16px;
-            border: 2px solid var(--border);
-            border-radius: var(--radius-md);
-            font-family: 'Prompt', sans-serif;
-            font-size: 15px;
-            color: var(--text-main);
-            background-color: #f8fafc;
-            transition: var(--transition);
-            appearance: none; /* เอาลูกศรของ Select เดิมออก */
-        }
-
-        /* สร้างลูกศร Select ใหม่ให้สวยขึ้น */
-        select.form-control {
-            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%2364748b' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
-            background-repeat: no-repeat;
-            background-position: right 16px center;
-            padding-right: 40px;
-        }
-
-        .form-control:focus {
-            outline: none;
-            border-color: var(--primary);
-            background-color: var(--surface);
-            box-shadow: 0 0 0 4px var(--primary-light);
-        }
-
-        .form-control::placeholder {
-            color: #cbd5e1;
-        }
-
-        /* ตกแต่ง Radio/Checkbox พิเศษแบบปุ่มกด (สำหรับ เพศ, สูบบุหรี่) */
-        .radio-group {
-            display: flex;
-            gap: 12px;
-        }
-
-        .radio-btn {
-            flex: 1;
-            position: relative;
-        }
-
-        .radio-btn input[type="radio"] {
-            position: absolute;
-            opacity: 0;
-            width: 0;
-            height: 0;
-        }
-
-        .radio-label {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 8px;
-            width: 100%;
-            padding: 12px;
-            background-color: #f8fafc;
-            border: 2px solid var(--border);
-            border-radius: var(--radius-md);
-            cursor: pointer;
-            font-weight: 500;
-            color: var(--text-muted);
-            transition: var(--transition);
-        }
-
-        .radio-btn input[type="radio"]:checked + .radio-label {
-            background-color: var(--primary-light);
-            border-color: var(--primary);
-            color: var(--primary);
-        }
-
-        .radio-label svg {
-            width: 18px;
-            height: 18px;
-        }
-
-        /* ==========================================================================
-           8. Buttons & Actions (ปุ่มกด)
-           ========================================================================== */
-        .action-area {
-            display: flex;
-            justify-content: flex-end;
-            gap: 16px;
-            margin-top: 20px;
-            padding-top: 30px;
-            border-top: 1px solid var(--border);
-        }
-
-        .btn {
-            padding: 14px 28px;
-            border-radius: var(--radius-md);
-            font-family: 'Prompt', sans-serif;
-            font-size: 16px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: var(--transition);
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            border: none;
-        }
-
-        .btn-outline {
-            background-color: transparent;
-            color: var(--secondary);
-            border: 2px solid var(--border);
-        }
-
-        .btn-outline:hover {
-            background-color: #f1f5f9;
-            color: var(--text-main);
-        }
-
-        .btn-primary {
-            background-color: var(--primary);
-            color: white;
-            box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3);
-        }
-
-        .btn-primary:hover {
-            background-color: var(--primary-hover);
-            transform: translateY(-2px);
-            box-shadow: 0 6px 16px rgba(37, 99, 235, 0.4);
-        }
-
-        /* ==========================================================================
-           9. Loading Overlay (หน้าจอโหลดประมวลผล)
-           ========================================================================== */
-        .loading-overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(255, 255, 255, 0.9);
-            backdrop-filter: blur(5px);
-            z-index: 9999;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            opacity: 0;
-            visibility: hidden;
-            transition: opacity 0.3s ease;
-        }
-
-        .loading-overlay.active {
-            opacity: 1;
-            visibility: visible;
-        }
-
-        .spinner {
-            width: 60px;
-            height: 60px;
-            border: 5px solid var(--primary-light);
-            border-top: 5px solid var(--primary);
-            border-radius: 50%;
-            animation: spin 1s linear infinite;
-            margin-bottom: 20px;
-        }
-
-        .loading-text {
-            font-size: 18px;
-            font-weight: 600;
-            color: var(--primary);
-            letter-spacing: 1px;
-        }
-
-        .loading-text::after {
-            content: '...';
-            animation: dots 1.5s steps(4, end) infinite;
-        }
-
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
-
-        @keyframes dots {
-            0%, 20% { content: ''; }
-            40% { content: '.'; }
-            60% { content: '..'; }
-            80%, 100% { content: '...'; }
-        }
-
-        /* ==========================================================================
-           10. Responsive Design (รองรับมือถือและแท็บเล็ต)
-           ========================================================================== */
-        @media (max-width: 1024px) {
-            .sidebar {
-                transform: translateX(-100%);
-            }
-            .main-content {
-                margin-left: 0;
-            }
-            .top-header {
-                padding: 0 20px;
-            }
-            /* ปุ่มเปิดเมนูบนมือถือ (เขียนเผื่อไว้) */
-            .menu-toggle {
-                display: block;
-            }
-        }
-
-        @media (max-width: 768px) {
-            .container {
-                padding: 20px;
-            }
-            .card-header-bg {
-                padding: 30px 20px;
-            }
-            .form-wrapper {
-                padding: 20px;
-            }
-            .action-area {
-                flex-direction: column;
-            }
-            .btn {
-                width: 100%;
-                justify-content: center;
-            }
-        }
+        /* Loading Overlay */
+        .loading-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(255, 255, 255, 0.9); backdrop-filter: blur(5px); z-index: 9999; display: flex; flex-direction: column; justify-content: center; align-items: center; opacity: 0; visibility: hidden; transition: opacity 0.3s ease; }
+        .loading-overlay.active { opacity: 1; visibility: visible; }
+        .spinner { width: 60px; height: 60px; border: 5px solid var(--primary-light); border-top: 5px solid var(--primary); border-radius: 50%; animation: spin 1s linear infinite; margin-bottom: 20px; }
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
     </style>
 </head>
 <body>
@@ -689,48 +128,15 @@
 
     <aside class="sidebar">
         <div class="sidebar-brand">
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                <path d="M22 12h-4l-3 9L9 3l-3 9H2"/>
-            </svg>
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg>
             SmartMed AI
         </div>
         <ul class="sidebar-menu">
-            <li class="menu-item">
-                <a href="{% url 'predict_risk' %}" class="menu-link active">
-                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"></rect><rect x="14" y="3" width="7" height="7"></rect><rect x="14" y="14" width="7" height="7"></rect><rect x="3" y="14" width="7" height="7"></rect></svg>
-                    แดชบอร์ดประเมินผล
-                </a>
-            </li>
-            <li class="menu-item">
-                <a href="{% url 'patients' %}" class="menu-link">
-                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>
-                    ทะเบียนผู้ป่วย (Mock)
-                </a>
-            </li>
-            <li class="menu-item">
-                <a href="{% url 'history' %}" class="menu-link">
-                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>
-                    ประวัติการวิเคราะห์
-                </a>
-            </li>
+            <li class="menu-item"><a href="{% url 'predict_risk' %}" class="menu-link active"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"></rect><rect x="14" y="3" width="7" height="7"></rect><rect x="14" y="14" width="7" height="7"></rect><rect x="3" y="14" width="7" height="7"></rect></svg>แดชบอร์ดประเมินผล</a></li>
+            <li class="menu-item"><a href="{% url 'patients' %}" class="menu-link"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle></svg>ทะเบียนผู้ป่วย (Mock)</a></li>
+            <li class="menu-item"><a href="{% url 'history' %}" class="menu-link"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline></svg>ประวัติการวิเคราะห์</a></li>
             <li class="menu-item" style="margin-top: auto; border-top: 1px solid var(--border); padding-top: 16px;">
-                <a href="{% url 'settings' %}" class="menu-link">
-                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg>
-                    การตั้งค่าระบบ
-                </a>
-            </li>
-        </ul>
-            <li class="menu-item">
-                <a href="#" class="menu-link">
-                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>
-                    ประวัติการวิเคราะห์
-                </a>
-            </li>
-            <li class="menu-item" style="margin-top: auto; border-top: 1px solid var(--border); padding-top: 16px;">
-                <a href="#" class="menu-link">
-                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg>
-                    การตั้งค่าระบบ
-                </a>
+                <a href="{% url 'settings' %}" class="menu-link"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg>การตั้งค่าระบบ</a>
             </li>
         </ul>
     </aside>
@@ -739,120 +145,142 @@
         <header class="top-header">
             <div class="page-title">เครื่องมือวิเคราะห์ความเสี่ยง (Risk Assessment Tool)</div>
             <div class="user-profile">
-                <span style="font-size: 14px; font-weight: 500; color: var(--secondary);">ผู้ใช้งานระบบ: นพ. แพทย์เวร</span>
-                <div class="avatar">พ</div>
+                {% if user.is_authenticated %}
+                    <span style="font-size: 14px; font-weight: 500; color: var(--secondary);">ผู้ใช้งาน: นพ. {{ user.username }}</span>
+                    <div class="avatar" style="background-color: var(--success-bg); color: var(--success); border-color: var(--success);">พ</div>
+                    <a href="{% url 'logout' %}" style="margin-left: 10px; padding: 8px 16px; background-color: #fef2f2; color: #dc2626; text-decoration: none; border-radius: 8px; font-size: 14px; font-weight: 600; border: 1px solid #fecaca; transition: 0.3s;">ออกจากระบบ</a>
+                {% else %}
+                    <span style="font-size: 14px; font-weight: 500; color: var(--secondary);">สำหรับบุคคลทั่วไป</span>
+                    <a href="{% url 'login' %}?next={% url 'history' %}" style="margin-left: 15px; padding: 8px 16px; background-color: var(--text-main); color: white; text-decoration: none; border-radius: 8px; font-size: 14px; font-weight: 500; display: flex; align-items: center; gap: 6px; transition: 0.3s;">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>
+                        เข้าสู่ระบบแพทย์
+                    </a>
+                {% endif %}
             </div>
         </header>
 
         <div class="container">
-            
             <div class="stats-grid">
                 <div class="stat-card">
-                    <div class="stat-icon icon-blue">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle></svg>
-                    </div>
-                    <div class="stat-details">
-                        <h4>ประเมินไปแล้ววันนี้</h4>
-                        <p>124 เคส</p>
-                    </div>
+                    <div class="stat-icon icon-blue"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle></svg></div>
+                    <div class="stat-details"><h4>ประเมินไปแล้วทั้งหมด</h4><p>{{ total_cases|default:0 }} เคส</p></div>
                 </div>
                 <div class="stat-card">
-                    <div class="stat-icon icon-green">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>
-                    </div>
-                    <div class="stat-details">
-                        <h4>ความแม่นยำ AI (Model)</h4>
-                        <p>74.14%</p>
-                    </div>
+                    <div class="stat-icon icon-green"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg></div>
+                    <div class="stat-details"><h4>ความแม่นยำ AI (Model)</h4><p>{{ ai_accuracy|default:"74.14" }}%</p></div>
                 </div>
                 <div class="stat-card">
-                    <div class="stat-icon icon-red">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg>
-                    </div>
-                    <div class="stat-details">
-                        <h4>พบความเสี่ยงสูง</h4>
-                        <p>38 เคส</p>
-                    </div>
+                    <div class="stat-icon icon-red"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg></div>
+                    <div class="stat-details"><h4>พบความเสี่ยงสูง</h4><p>{{ high_risk_cases|default:0 }} เคส</p></div>
                 </div>
             </div>
 
             <div class="prediction-card">
                 <div class="card-header-bg">
-                    <h2>
-                        <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2" ry="2"></rect><line x1="8" y1="21" x2="16" y2="21"></line><line x1="12" y1="17" x2="12" y2="21"></line></svg>
-                        ระบบประมวลผลโรคหลอดเลือดหัวใจ (CVD)
-                    </h2>
+                    <h2><svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2" ry="2"></rect><line x1="8" y1="21" x2="16" y2="21"></line><line x1="12" y1="17" x2="12" y2="21"></line></svg> ระบบประมวลผลโรคหลอดเลือดหัวใจ (CVD)</h2>
                     <p>กรุณากรอกข้อมูลสุขภาพของผู้ป่วยให้ครบถ้วน ระบบจะทำการเทียบเคียงกับฐานข้อมูล Dataset 70,000 รายการด้วย Machine Learning เพื่อวิเคราะห์แนวโน้มการเกิดโรค</p>
                 </div>
 
                 <div class="form-wrapper">
-                    
                     {% if result %}
-                        <div class="result-container {% if 'เสี่ยง' in result %}result-danger{% else %}result-success{% endif %}" id="resultArea">
-                            <div class="result-icon">
-                                {% if 'เสี่ยง' in result %}⚠️{% else %}✅{% endif %}
+                        <div id="resultArea" style="background-color: white; border: 2px solid {% if 'เสี่ยง' in result %}#fca5a5{% else %}#6ee7b7{% endif %}; border-radius: 16px; padding: 40px; box-shadow: 0 10px 25px rgba(0,0,0,0.05); margin-bottom: 20px; position: relative;">
+                            
+                            <div style="border-bottom: 2px dashed #e2e8f0; padding-bottom: 20px; margin-bottom: 20px; text-align: center;">
+                                <h2 style="color: #0f172a; font-size: 24px; font-weight: 700; margin-bottom: 5px;">ใบรายงานผลการประเมินความเสี่ยงโรคหัวใจ</h2>
+                                <p style="color: #64748b; font-size: 14px;">วิเคราะห์โดยระบบปัญญาประดิษฐ์ (Smart Medical AI System)</p>
                             </div>
-                            <div class="result-content">
-                                <h3>ผลการวิเคราะห์จาก AI</h3>
-                                <p>{{ result }}</p>
+                            
+                            <div id="gaugeChart" style="display: flex; justify-content: center; min-height: 280px; margin-top: -10px;"></div>
+
+                            <div style="background-color: {% if 'เสี่ยง' in result %}#fef2f2{% else %}#ecfdf5{% endif %}; padding: 20px; border-radius: 12px; text-align: center; margin-top: 10px; border: 1px solid {% if 'เสี่ยง' in result %}#fecaca{% else %}#a7f3d0{% endif %};">
+                                <p style="font-size: 22px; font-weight: 700; color: {% if 'เสี่ยง' in result %}#dc2626{% else %}#059669{% endif %};">{{ result }}</p>
                                 {% if 'เสี่ยง' in result %}
-                                <p style="font-size: 13px; margin-top: 5px; opacity: 0.8;">* แนะนำให้ทำการตรวจคลื่นไฟฟ้าหัวใจ (EKG) เพิ่มเติม</p>
+                                    <p style="font-size: 15px; margin-top: 10px; font-weight: 500; color: #991b1b;">* ข้อบ่งชี้: ระบบตรวจพบปัจจัยเสี่ยงสูง แนะนำให้เข้ารับการตรวจคลื่นไฟฟ้าหัวใจ (EKG) ที่โรงพยาบาลโดยเร็ว</p>
+                                {% else %}
+                                    <p style="font-size: 15px; margin-top: 10px; font-weight: 500; color: #065f46;">* ข้อบ่งชี้: สุขภาพโดยรวมอยู่ในเกณฑ์ดี แนะนำให้รักษาพฤติกรรมการทานอาหารและออกกำลังกายอย่างสม่ำเสมอ</p>
                                 {% endif %}
                             </div>
+                            
+                            <div style="margin-top: 40px; font-size: 12px; color: #94a3b8; text-align: left; line-height: 1.5;">
+                                <p><b>หมายเหตุสำคัญ:</b> รายงานฉบับนี้สร้างขึ้นโดยแบบจำลอง Machine Learning เพื่อการประเมินความเสี่ยงเบื้องต้นจากข้อมูลที่ระบุเท่านั้น ไม่สามารถใช้ทดแทนการวินิจฉัยทางการแพทย์โดยแพทย์ผู้เชี่ยวชาญได้</p>
+                            </div>
                         </div>
+
+                        <div style="text-align: center; margin-bottom: 50px;">
+                            <button onclick="downloadPDF()" class="btn btn-primary" style="background-color: #0f172a; margin: 0 auto; display: inline-flex; box-shadow: 0 4px 15px rgba(15, 23, 42, 0.3);">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+                                ดาวน์โหลดใบรายงานผล (Save PDF Report)
+                            </button>
+                        </div>
+                        
+                        <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+                        <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
                         
                         <script>
                             document.addEventListener("DOMContentLoaded", function() {
                                 document.getElementById('resultArea').scrollIntoView({ behavior: 'smooth', block: 'center' });
+                                var riskPercent = {{ risk_percentage|default:0 }};
+                                var themeColor = riskPercent >= 50 ? '#ef4444' : '#10b981'; 
+                                var options = {
+                                    series: [riskPercent],
+                                    chart: { type: 'radialBar', height: 380, offsetY: -10, animations: { enabled: false } },
+                                    plotOptions: {
+                                        radialBar: {
+                                            startAngle: -135, endAngle: 135,
+                                            hollow: { margin: 15, size: '60%', background: 'transparent' },
+                                            track: { background: '#e2e8f0', strokeWidth: '100%' },
+                                            dataLabels: {
+                                                show: true,
+                                                name: { offsetY: 25, show: true, color: '#64748b', fontSize: '14px', fontFamily: 'Prompt' },
+                                                value: { offsetY: -10, color: themeColor, fontSize: '46px', fontWeight: 'bold', fontFamily: 'Prompt', show: true,
+                                                    formatter: function (val) { return val + "%"; }
+                                                }
+                                            }
+                                        }
+                                    },
+                                    fill: { type: 'gradient', gradient: { shade: 'dark', type: 'horizontal', colorStops: [{ offset: 0, color: riskPercent >= 50 ? '#fca5a5' : '#6ee7b7', opacity: 1 }, { offset: 100, color: themeColor, opacity: 1 }] } },
+                                    stroke: { lineCap: 'round' },
+                                    labels: ['โอกาสเกิดโรค (Risk)'],
+                                };
+                                var chart = new ApexCharts(document.querySelector("#gaugeChart"), options);
+                                chart.render();
                             });
+
+                            function downloadPDF() {
+                                var element = document.getElementById('resultArea');
+                                var opt = { margin: [15, 15, 15, 15], filename: 'SmartMed_Report.pdf', image: { type: 'jpeg', quality: 1.0 },
+                                    html2canvas: { scale: 2, useCORS: true, scrollY: 0, windowWidth: document.documentElement.offsetWidth }, 
+                                    jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
+                                };
+                                html2pdf().set(opt).from(element).save();
+                            }
                         </script>
                     {% endif %}
-
+                    
                     <form method="POST" id="predictionForm" onsubmit="showLoading()">
                         {% csrf_token %}
                         
                         <div class="form-section">
                             <div class="section-header">
-                                <div class="section-icon">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
-                                </div>
-                                <div class="section-title">
-                                    <h3>1. ข้อมูลกายภาพพื้นฐาน (Demographics)</h3>
-                                    <p>ข้อมูลทั่วไปเกี่ยวกับร่างกายของผู้ป่วย</p>
-                                </div>
+                                <div class="section-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg></div>
+                                <div class="section-title"><h3>1. ข้อมูลกายภาพพื้นฐาน (Demographics)</h3><p>ข้อมูลทั่วไปเกี่ยวกับร่างกายของผู้ป่วย</p></div>
                             </div>
-                            
                             <div class="input-grid">
                                 <div class="input-group">
                                     <label>อายุ (ปี)</label>
-                                    <input type="number" name="age" class="form-control" placeholder="กรอกอายุเป็นปีเต็ม" required min="1" max="120">
+                                    <input type="number" name="age" class="form-control" placeholder="เช่น 45" required min="1" max="120">
                                 </div>
-                                
                                 <div class="input-group">
                                     <label>เพศกำเนิด</label>
                                     <div class="radio-group">
-                                        <div class="radio-btn">
-                                            <input type="radio" name="gender" id="gender_female" value="1" required>
-                                            <label class="radio-label" for="gender_female">
-                                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="10" r="6"/><line x1="12" y1="16" x2="12" y2="22"/><line x1="9" y1="19" x2="15" y2="19"/></svg>
-                                                หญิง
-                                            </label>
-                                        </div>
-                                        <div class="radio-btn">
-                                            <input type="radio" name="gender" id="gender_male" value="2">
-                                            <label class="radio-label" for="gender_male">
-                                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="10" cy="14" r="6"/><line x1="14.24" y1="9.76" x2="20" y2="4"/><line x1="15" y1="4" x2="20" y2="4"/><line x1="20" y1="9" x2="20" y2="4"/></svg>
-                                                ชาย
-                                            </label>
-                                        </div>
+                                        <div class="radio-btn"><input type="radio" name="gender" id="gender_female" value="1" required><label class="radio-label" for="gender_female">หญิง</label></div>
+                                        <div class="radio-btn"><input type="radio" name="gender" id="gender_male" value="2"><label class="radio-label" for="gender_male">ชาย</label></div>
                                     </div>
                                 </div>
-
                                 <div class="input-group">
                                     <label>ส่วนสูง (เซนติเมตร)</label>
                                     <input type="number" name="height" class="form-control" placeholder="เช่น 170" required min="50" max="250">
                                 </div>
-
                                 <div class="input-group">
                                     <label>น้ำหนัก (กิโลกรัม)</label>
                                     <input type="number" step="0.1" name="weight" class="form-control" placeholder="เช่น 65.5" required min="10" max="300">
@@ -862,38 +290,18 @@
 
                         <div class="form-section">
                             <div class="section-header">
-                                <div class="section-icon">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 12h-4l-3 9L9 3l-3 9H2"></path></svg>
-                                </div>
-                                <div class="section-title">
-                                    <h3>2. ผลการตรวจทางห้องปฏิบัติการ (Clinical Data)</h3>
-                                    <p>ข้อมูลจากการวัดความดันและการเจาะเลือด</p>
-                                </div>
+                                <div class="section-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 12h-4l-3 9L9 3l-3 9H2"></path></svg></div>
+                                <div class="section-title"><h3>2. ผลการตรวจทางห้องปฏิบัติการ (Clinical Data)</h3><p>ข้อมูลจากการวัดความดันและการเจาะเลือด</p></div>
                             </div>
-                            
                             <div class="input-grid">
                                 <div class="input-group">
-                                    <label>
-                                        ความดันโลหิตตัวบน (Systolic)
-                                        <div class="tooltip-icon">
-                                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
-                                            <span class="tooltip-text">ค่าความดันขณะหัวใจบีบตัว (ค่าปกติไม่ควรเกิน 120 mmHg)</span>
-                                        </div>
-                                    </label>
-                                    <input type="number" name="ap_hi" class="form-control" placeholder="เช่น 120" required>
+                                    <label>ความดันโลหิตตัวบน (Systolic)</label>
+                                    <input type="number" name="ap_hi" class="form-control" placeholder="ค่าปกติคือ 120" required>
                                 </div>
-
                                 <div class="input-group">
-                                    <label>
-                                        ความดันโลหิตตัวล่าง (Diastolic)
-                                        <div class="tooltip-icon">
-                                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
-                                            <span class="tooltip-text">ค่าความดันขณะหัวใจคลายตัว (ค่าปกติไม่ควรเกิน 80 mmHg)</span>
-                                        </div>
-                                    </label>
-                                    <input type="number" name="ap_lo" class="form-control" placeholder="เช่น 80" required>
+                                    <label>ความดันโลหิตตัวล่าง (Diastolic)</label>
+                                    <input type="number" name="ap_lo" class="form-control" placeholder="ค่าปกติคือ 80" required>
                                 </div>
-
                                 <div class="input-group">
                                     <label>ระดับคอเลสเตอรอล (Cholesterol)</label>
                                     <select name="cholesterol" class="form-control" required>
@@ -903,7 +311,6 @@
                                         <option value="3">สูงมาก (Well Above Normal)</option>
                                     </select>
                                 </div>
-
                                 <div class="input-group">
                                     <label>ระดับน้ำตาลในเลือด (Glucose)</label>
                                     <select name="gluc" class="form-control" required>
@@ -918,15 +325,9 @@
 
                         <div class="form-section">
                             <div class="section-header">
-                                <div class="section-icon">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path></svg>
-                                </div>
-                                <div class="section-title">
-                                    <h3>3. พฤติกรรมการใช้ชีวิต (Lifestyle)</h3>
-                                    <p>ปัจจัยเสี่ยงที่เกิดจากการใช้ชีวิตประจำวัน</p>
-                                </div>
+                                <div class="section-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path></svg></div>
+                                <div class="section-title"><h3>3. พฤติกรรมการใช้ชีวิต (Lifestyle)</h3><p>ปัจจัยเสี่ยงที่เกิดจากการใช้ชีวิตประจำวัน</p></div>
                             </div>
-                            
                             <div class="input-grid">
                                 <div class="input-group">
                                     <label>ประวัติการสูบบุหรี่</label>
@@ -935,7 +336,6 @@
                                         <option value="1">สูบเป็นประจำ</option>
                                     </select>
                                 </div>
-
                                 <div class="input-group">
                                     <label>การดื่มเครื่องดื่มแอลกอฮอล์</label>
                                     <select name="alco" class="form-control" required>
@@ -943,7 +343,6 @@
                                         <option value="1">ดื่มเป็นประจำ</option>
                                     </select>
                                 </div>
-
                                 <div class="input-group">
                                     <label>การออกกำลังกาย</label>
                                     <select name="active" class="form-control" required>
@@ -955,13 +354,11 @@
                         </div>
 
                         <div class="action-area">
-                            
                             <button type="submit" class="btn btn-primary">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>
                                 เริ่มการประมวลผลด้วย AI
                             </button>
                         </div>
-
                     </form>
                 </div>
             </div>
@@ -970,45 +367,21 @@
                 &copy; 2026 Smart Medical System. Powered by Django & Machine Learning. <br>
                 ระบบนี้เป็นเพียงการประเมินเบื้องต้น ไม่สามารถทดแทนการวินิจฉัยของแพทย์ได้
             </div>
-
         </div>
     </main>
 
     <script>
         function showLoading() {
-            // ดึง Overlay ขึ้นมาแสดง
             const overlay = document.getElementById('loadingOverlay');
             overlay.classList.add('active');
-
-            // เปลี่ยนข้อความตอนโหลดให้ดูสมจริงขึ้นแบบสุ่มเวลา
-            const messages = [
-                "กำลังเชื่อมต่อโมเดล Machine Learning...",
-                "กำลังวิเคราะห์ค่าความดันและผลเลือด...",
-                "กำลังเทียบเคียงข้อมูล 70,000 รายการ...",
-                "เตรียมแสดงผลลัพธ์..."
-            ];
-            
+            const messages = ["กำลังเชื่อมต่อโมเดล Machine Learning...", "กำลังวิเคราะห์ค่าความดันและผลเลือด...", "กำลังเทียบเคียงข้อมูล 70,000 รายการ...", "เตรียมแสดงผลลัพธ์..."];
             let messageIndex = 0;
             const messageEl = document.getElementById('loadingMessage');
-            
-            // เปลี่ยนข้อความทุกๆ 800ms (ไม่ต้องห่วงครับ ฟอร์มจะ submit ไปหา Django ตามปกติ)
-            const interval = setInterval(() => {
+            setInterval(() => {
                 messageIndex++;
-                if (messageIndex < messages.length) {
-                    messageEl.textContent = messages[messageIndex];
-                }
+                if (messageIndex < messages.length) { messageEl.textContent = messages[messageIndex]; }
             }, 800);
         }
-
-        // ป้องกันผู้ใช้กรอกค่าติดลบในช่องตัวเลข
-        document.querySelectorAll('input[type="number"]').forEach(input => {
-            input.addEventListener('input', function() {
-                if (this.value < 0) {
-                    this.value = '';
-                    alert('กรุณากรอกตัวเลขที่มากกว่า 0');
-                }
-            });
-        });
     </script>
 </body>
 </html>

@@ -48,3 +48,11 @@ print(f"✅ ฝึกสอนโมเดลสำเร็จ! ความแ
 joblib.dump(model, 'heart_model.pkl')
 joblib.dump(scaler, 'scaler.pkl') # ต้องเซฟ scaler ไปด้วย เพื่อใช้แปลงข้อมูลที่รับมาจากหน้าเว็บ
 print("✅ บันทึกไฟล์ 'heart_model.pkl' และ 'scaler.pkl' เรียบร้อยแล้ว!")
+
+from sklearn.metrics import classification_report
+
+# เปลี่ยนตอนให้ AI ทายผล ให้ใช้ตัวแปรที่ลงท้ายด้วย _scaled
+y_pred_report = model.predict(X_test_scaled) 
+
+# ปริ้นท์ตารางคะแนน
+print(classification_report(y_test, y_pred_report))
