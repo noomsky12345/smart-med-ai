@@ -15,7 +15,7 @@ SCALER_PATH = os.path.join(settings.BASE_DIR, 'ml_model', 'scaler.pkl')
 model = joblib.load(MODEL_PATH)
 scaler = joblib.load(SCALER_PATH)
 
-# 🌟 ฟังก์ชันหน้าประเมินผล (ลบ @login_required ออกแล้ว เพื่อให้คนทั่วไปเข้าใช้งานได้)
+# 🌟 ฟังก์ชันหน้าประเมินผล (
 def predict_risk(request):
     result = None
     risk_percentage = 0
@@ -116,3 +116,9 @@ def settings_page(request):
 def logout_user(request):
     logout(request)
     return redirect('login')
+
+import os
+from django.conf import settings
+
+MODEL_PATH = os.path.join(settings.BASE_DIR, 'ml_model', 'heart_model.pkl')
+SCALER_PATH = os.path.join(settings.BASE_DIR, 'ml_model', 'scaler.pkl')
