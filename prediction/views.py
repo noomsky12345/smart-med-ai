@@ -8,10 +8,13 @@ import numpy as np
 from .models import PatientRecord 
 
 # กำหนดเส้นทางไปหาไฟล์โมเดลในโฟลเดอร์ ml_model
+import os
+from django.conf import settings
+
+# ใช้ Path แบบนี้เพื่อให้ Render หาไฟล์ใน ml_model เจอแน่นอน
 MODEL_PATH = os.path.join(settings.BASE_DIR, 'ml_model', 'heart_model.pkl')
 SCALER_PATH = os.path.join(settings.BASE_DIR, 'ml_model', 'scaler.pkl')
 
-# โหลดโมเดลและ Scaler เตรียมไว้ 
 model = joblib.load(MODEL_PATH)
 scaler = joblib.load(SCALER_PATH)
 
